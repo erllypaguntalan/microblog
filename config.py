@@ -22,3 +22,6 @@ MAIL_PASSWORD = None
 
 # administrator list
 ADMINS = ['lelepaguntalan@yahoo.com']
+
+# pagination
+POSTS_PER_PAGE = 3
