@@ -2,7 +2,12 @@ from hashlib import md5
 from app import db
 from app import app
 
-import flask.ext.whooshalchemy as whooshalchemy
+import sys
+if sys.version_info >= (3, 0):
+    enable_search = False
+else:
+    enable_search = True
+    import flask.ext.whooshalchemy as whooshalchemy
 
 
 followers = db.Table(
@@ -79,7 +84,7 @@ class User(db.Model):
             followers, (followers.c.followed_id == Post.user_id)).filter(
                 followers.c.follower_id == self.id).order_by(
                     Post.timestamp.desc())
-                
+
     def sorted_posts(self):
         return self.posts.order_by(Post.timestamp.desc())
 
@@ -98,4 +103,6 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post %r>' % (self.body)
 
-whooshalchemy.whoosh_index(app, Post)
+
+if enable_search:
+    whooshalchemy.whoosh_index(app, Post)

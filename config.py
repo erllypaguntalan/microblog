@@ -14,15 +14,18 @@ OPENID_PROVIDERS = [
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 WHOOSH_BASE = os.path.join(basedir, 'search.db')
+WHOOSH_ENABLED = os.environ.get('HEROKU') is None
 
 # mail server settings
-MAIL_SERVER = 'localhost'
-MAIL_PORT = 25
-MAIL_USERNAME = None
-MAIL_PASSWORD = None
+MAIL_SERVER = 'smtp.googlemail.com'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = os.environ.get('erllypaguntalan@gmail.com')
+MAIL_PASSWORD = os.environ.get('1234567890')
 
 # administrator list
-ADMINS = ['you@example.com']
+ADMINS = ['erllypaguntalan@gmail.com']
 
 # pagination
 POSTS_PER_PAGE = 3
