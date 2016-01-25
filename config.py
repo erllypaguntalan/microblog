@@ -17,15 +17,15 @@ WHOOSH_BASE = os.path.join(basedir, 'search.db')
 WHOOSH_ENABLED = os.environ.get('HEROKU') is None
 
 # mail server settings
-MAIL_SERVER = 'smtp.googlemail.com'
-MAIL_PORT = 465
+MAIL_SERVER = 'smtp.gmail.com'
+MAIL_PORT = 587
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
-MAIL_USERNAME = os.environ.get('erllypaguntalan@gmail.com')
-MAIL_PASSWORD = os.environ.get('1234567890')
+MAIL_USERNAME = os.environ.get('e.paguntalan')
+MAIL_PASSWORD = os.environ.get('12354667890')
 
 # administrator list
-ADMINS = ['erllypaguntalan@gmail.com']
+ADMINS = ['e.paguntalan@klab.com']
 
 # pagination
 POSTS_PER_PAGE = 3
