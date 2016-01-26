@@ -33,6 +33,10 @@ LANGUAGES = {
 # administrator list
 ADMINS = ['e.paguntalan@klab.com']
 
+# microsoft translation service
+MS_TRANSLATOR_CLIENT_ID = 'lele' # enter your MS translator app id here
+MS_TRANSLATOR_CLIENT_SECRET = 'aGlS43GFMEYidS1SMHQ6wrYZnxYgFWGgyZWYiJx/7dA=' # enter your MS translator app secret here
+
 # pagination
 POSTS_PER_PAGE = 3
 MAX_SEARCH_RESULTS = 50

@@ -1,18 +1,22 @@
 #!flask/bin/python
+# -*- coding: utf8 -*-
+
 import os
 import unittest
+from datetime import datetime, timedelta
 
 from config import basedir
 from app import app, db
-from datetime import datetime, timedelta
 from app.models import User, Post
+from app.translate import microsoft_translate
+
 
 class TestCase(unittest.TestCase):
     def setUp(self):
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'test.db')
-        self.app = app.test_client()
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+            os.path.join(basedir, 'test.db')
         db.create_all()
 
     def tearDown(self):
@@ -20,17 +24,21 @@ class TestCase(unittest.TestCase):
         db.drop_all()
 
     def test_avatar(self):
+        # create a user
         u = User(nickname='john', email='john@example.com')
         avatar = u.avatar(128)
-        expected = 'http://www.gravatar.com/avatar/d4c74594d841139328695756648b6bd6'
+        expected = 'http://www.gravatar.com/avatar/' + \
+            'd4c74594d841139328695756648b6bd6'
         assert avatar[0:len(expected)] == expected
 
     def test_make_unique_nickname(self):
+        # create a user and write it to the database
         u = User(nickname='john', email='john@example.com')
         db.session.add(u)
         db.session.commit()
         nickname = User.make_unique_nickname('john')
         assert nickname != 'john'
+        # make another user with the new nickname
         u = User(nickname=nickname, email='susan@example.com')
         db.session.add(u)
         db.session.commit()
@@ -74,10 +82,14 @@ class TestCase(unittest.TestCase):
         db.session.add(u4)
         # make four posts
         utcnow = datetime.utcnow()
-        p1 = Post(body="post from john", author=u1, timestamp=utcnow + timedelta(seconds=1))
-        p2 = Post(body="post from susan", author=u2, timestamp=utcnow + timedelta(seconds=2))
-        p3 = Post(body="post from mary", author=u3, timestamp=utcnow + timedelta(seconds=3))
-        p4 = Post(body="post from david", author=u4, timestamp=utcnow + timedelta(seconds=4))
+        p1 = Post(body="post from john", author=u1,
+                  timestamp=utcnow + timedelta(seconds=1))
+        p2 = Post(body="post from susan", author=u2,
+                  timestamp=utcnow + timedelta(seconds=2))
+        p3 = Post(body="post from mary", author=u3,
+                  timestamp=utcnow + timedelta(seconds=3))
+        p4 = Post(body="post from david", author=u4,
+                  timestamp=utcnow + timedelta(seconds=4))
         db.session.add(p1)
         db.session.add(p2)
         db.session.add(p3)
@@ -110,6 +122,11 @@ class TestCase(unittest.TestCase):
         assert f2 == [p3, p2]
         assert f3 == [p4, p3]
         assert f4 == [p4]
+
+    def test_translation(self):
+        assert microsoft_translate(u'English', 'en', 'es') == u'Inglés'
+        assert microsoft_translate(u'Español', 'es', 'en') == u'Spanish'
+
 
 if __name__ == '__main__':
     unittest.main()
