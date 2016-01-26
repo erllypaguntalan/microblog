@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -22,6 +23,12 @@ MAIL_USE_TLS = False
 MAIL_USE_SSL = True
 MAIL_USERNAME = os.environ.get('e.paguntalan')
 MAIL_PASSWORD = os.environ.get('12354667890')
+
+# available languages
+LANGUAGES = {
+    'en': 'English',
+    'es': 'Español'
+}
 
 # administrator list
 ADMINS = ['e.paguntalan@klab.com']
