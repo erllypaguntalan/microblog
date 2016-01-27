@@ -1,14 +1,16 @@
-import re
 from hashlib import md5
+import re
 from app import db
 from app import app
+from config import WHOOSH_ENABLED
 
 import sys
 if sys.version_info >= (3, 0):
     enable_search = False
 else:
-    enable_search = True
-    import flask.ext.whooshalchemy as whooshalchemy
+    enable_search = WHOOSH_ENABLED
+    if enable_search:
+        import flask.ext.whooshalchemy as whooshalchemy
 
 
 followers = db.Table(
@@ -31,6 +33,7 @@ class User(db.Model):
                                secondaryjoin=(followers.c.followed_id == id),
                                backref=db.backref('followers', lazy='dynamic'),
                                lazy='dynamic')
+
     @staticmethod
     def make_valid_nickname(nickname):
         return re.sub('[^a-zA-Z0-9_\.]', '', nickname)
@@ -89,10 +92,7 @@ class User(db.Model):
                 followers.c.follower_id == self.id).order_by(
                     Post.timestamp.desc())
 
-    def sorted_posts(self):
-        return self.posts.order_by(Post.timestamp.desc())
-
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return '<User %r>' % (self.nickname)
 
 
@@ -104,8 +104,8 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     language = db.Column(db.String(5))
-    
-    def __repr__(self):
+
+    def __repr__(self):  # pragma: no cover
         return '<Post %r>' % (self.body)
 
 
